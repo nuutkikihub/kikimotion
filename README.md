@@ -1,6 +1,6 @@
 # kiki motion studio
 
-An immersive, full-frame backdrop and motion gallery. Minimal black and champagne styling, floating controls, adjustable room lighting, and a collection of 8 stills and four motion films.
+An immersive, full-frame backdrop and motion gallery. Minimal black and champagne styling, floating controls, adjustable room lighting, and a collection of 10 stills and four motion films.
 
 ## Preview locally
 
