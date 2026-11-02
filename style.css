@@ -4,3 +4,6 @@ body{overflow-x:hidden}header{position:absolute;inset:0 0 auto;z-index:5;width:1
 
 .showroom>.expand{position:absolute;z-index:8}
 .still-heading{margin-top:64px}.collection-note{color:#8c8579;font-size:11px}.resume{background:none;border:0;color:#c7b490;font-size:11px;padding:8px 0;white-space:nowrap}.resume[hidden]{display:none}@media(max-width:700px){.collection-head{align-items:flex-start;flex-direction:column}.collection-note{font-size:10px;margin:0}.still-heading{margin-top:42px}.resume{order:4}.current h2{font-size:16px}.controls .current{min-width:180px}.controls{right:5%;padding-right:30px}}
+
+/* Preserve the complete 3:2 slides on the stage and in the collection. */
+.screen #art{object-fit:contain;background:#080808}#gallery .thumb{aspect-ratio:3/2;background:#080808}#gallery .thumb img{object-fit:contain}
