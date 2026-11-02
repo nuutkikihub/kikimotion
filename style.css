@@ -7,3 +7,5 @@ body{overflow-x:hidden}header{position:absolute;inset:0 0 auto;z-index:5;width:1
 
 /* Preserve the complete 3:2 slides on the stage and in the collection. */
 .screen #art{object-fit:contain;background:#080808}#gallery .thumb{aspect-ratio:3/2;background:#080808}#gallery .thumb img{object-fit:contain}
+
+#motion-section[hidden]{display:none}#motion-section[hidden]+.still-heading{margin-top:0}
