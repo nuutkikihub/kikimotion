@@ -10,7 +10,7 @@ body{overflow-x:hidden}header{position:absolute;inset:0 0 auto;z-index:5;width:1
 
 #motion-section[hidden]{display:none}#motion-section[hidden]+.still-heading{margin-top:0}
 
-/* Fit the entire mapping clip slightly beyond the stage screen, within the visible viewport. */
-.room>.mapping{position:absolute;left:50%;--mapping-half-height:min(max(7.29vw,12.91svh),13.45vw,48svh);top:clamp(calc(50% - 50svh + var(--mapping-half-height)),36.325%,calc(50% + 50svh - var(--mapping-half-height)));width:min(52%,96vw,342svh);height:auto;aspect-ratio:1920/538;transform:translate(-50%,-50%);object-fit:contain;mix-blend-mode:plus-lighter;pointer-events:none;z-index:1}
+/* Fit the entire mapping clip across the room, within the visible viewport. */
+.room>.mapping{position:absolute;left:50%;--mapping-half-height:min(13.45vw,48svh);top:clamp(calc(50% - 50svh + var(--mapping-half-height)),36.325%,calc(50% + 50svh - var(--mapping-half-height)));width:min(96%,96vw,342svh);height:auto;aspect-ratio:1920/538;transform:translate(-50%,-50%);object-fit:contain;mix-blend-mode:plus-lighter;pointer-events:none;z-index:1}
 .room>.mapping[hidden],.screen #film[hidden]{display:none}
 .screen #film{object-fit:contain}
