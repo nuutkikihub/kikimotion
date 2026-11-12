@@ -1,6 +1,6 @@
 # kiki motion studio
 
-An immersive, full-frame backdrop and motion gallery. Minimal black and champagne styling, floating controls, adjustable room lighting, and six motion films and one full-room mapping film.
+An immersive, full-frame backdrop and motion gallery. Minimal black and champagne styling, floating controls, adjustable room lighting, and twelve motion films and one full-room mapping film.
 
 ## Preview locally
 
@@ -19,4 +19,4 @@ Static website: publish this repository root with any static hosting provider. N
 
 Artwork and media remain the property of their respective owners. No reuse license is granted.
 
-All seven clips play as a muted continuous playlist and can be selected individually. Mapping uses full-room additive blending and fits the complete video across the room without stretching it.
+All thirteen clips play as a muted continuous playlist and can be selected individually. Mapping uses full-room additive blending and fits the complete video across the room without stretching it.

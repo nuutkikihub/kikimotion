@@ -4,6 +4,13 @@ const films = Array.from({length: 6}, (_, i) => {
   return {id, name: 'Wedding in motion ' + id, src: 'assets/render-' + id + '.mp4', poster: 'assets/render-' + id + '.jpg'};
 });
 films.push({id: '07', name: 'Mapping', src: 'assets/mapping.mp4', poster: 'assets/mapping.jpg', fullRoom: true});
+for (const group of ['Ben', 'ETC']) {
+  for (const speed of ['Fast', 'Medium', 'Slow']) {
+    const slug = (group + '-' + speed).toLowerCase();
+    const id = String(films.length + 1).padStart(2, '0');
+    films.push({id, name: group + ' · ' + speed, src: 'assets/' + slug + '.mp4', poster: 'assets/' + slug + '.jpg'});
+  }
+}
 const film = $('film'), mapping = $('mapping'), cards = [];
 let selected = 0;
 
