@@ -52,13 +52,46 @@ $('light').oninput = e => {
   $('room').style.setProperty('--room-light', e.target.value / 100);
   $('lightvalue').textContent = e.target.value + '%';
 };
+const touchDevice = matchMedia('(pointer: coarse)');
+const portrait = matchMedia('(orientation: portrait)');
+const rotateHint = $('rotate-hint');
+let landscapeLocked = false;
+
+portrait.addEventListener('change', () => {
+  if (!portrait.matches) rotateHint.hidden = true;
+});
+
+document.addEventListener('fullscreenchange', () => {
+  if (document.fullscreenElement) return;
+  if (landscapeLocked) screen.orientation?.unlock?.();
+  landscapeLocked = false;
+  rotateHint.hidden = true;
+});
+
 $('fullscreen').onclick = async () => {
-  try {
-    if (document.fullscreenElement) await document.exitFullscreen();
-    else await $('room').requestFullscreen();
-  } catch {
-    $('room').scrollIntoView({behavior: 'smooth', block: 'center'});
+  rotateHint.hidden = true;
+  if (document.fullscreenElement) {
+    await document.exitFullscreen();
+    return;
   }
+  const room = $('room');
+  try {
+    await room.requestFullscreen();
+  } catch {
+    room.scrollIntoView({behavior: 'smooth', block: 'center'});
+  }
+  if (!touchDevice.matches) return;
+  if (document.fullscreenElement === room && screen.orientation?.lock) {
+    try {
+      await screen.orientation.lock('landscape');
+      if (document.fullscreenElement === room) landscapeLocked = true;
+      else screen.orientation.unlock?.();
+      return;
+    } catch {
+      // Unsupported browsers still allow the viewer to turn the phone manually.
+    }
+  }
+  rotateHint.hidden = !portrait.matches;
 };
 document.addEventListener('keydown', e => {
   if (['INPUT', 'TEXTAREA', 'BUTTON'].includes(document.activeElement.tagName)) return;

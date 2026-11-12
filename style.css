@@ -14,3 +14,7 @@ body{overflow-x:hidden}header{position:absolute;inset:0 0 auto;z-index:5;width:1
 .room>.mapping{position:absolute;left:50%;--mapping-half-height:min(14.011vw,50svh);top:clamp(calc(50% - 50svh + var(--mapping-half-height)),36.325%,calc(50% + 50svh - var(--mapping-half-height)));width:min(100%,100vw,356.8svh);height:auto;aspect-ratio:1920/538;transform:translate(-50%,-50%) scale(1.2);object-fit:contain;mix-blend-mode:plus-lighter;pointer-events:none;z-index:1}
 .room>.mapping[hidden],.screen #film[hidden]{display:none}
 .screen #film{object-fit:contain}
+
+.rotate-hint{position:absolute;z-index:4;left:50%;top:20%;transform:translateX(-50%);width:max-content;max-width:86vw;margin:0;padding:10px 15px;border-radius:6px;background:#10100fe8;color:#f6e9d0;font-size:14px;text-align:center}
+.rotate-hint[hidden]{display:none}
+@media(orientation:landscape){.rotate-hint{display:none}}
