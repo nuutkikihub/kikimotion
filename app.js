@@ -1,17 +1,67 @@
-const videosEnabled=false;
-const films=Array.from({length:4},(_,i)=>({file:`motion-${String(i+1).padStart(2,'0')}.jpg`,src:i===0?'film.mp4':`film-${String(i+1).padStart(2,'0')}.mp4`,name:`Wedding in motion ${String(i+1).padStart(2,'0')}`,type:'motion'}));
-const stills=[{"file":"s-01.jpg?v=a1bde0d04e","name":"ยกน้ำชา","type":"still"},{"file":"s-02.jpg?v=5a82e6cf6a","name":"รอบ่าวสาว","type":"still"},{"file":"s-03.jpg?v=f71108599f","name":"เปิดตัว","type":"still"},{"file":"s-04.jpg?v=79047e97b2","name":"สัมภาษณ์","type":"still"},{"file":"s-05.jpg?v=402470aa37","name":"ตัดเค้ก","type":"still"},{"file":"s-06.jpg?v=0fe5c43175","name":"โยนดอกไม้","type":"still"},{"file":"s-07.jpg?v=0d54a6c485","name":"After Party 1","type":"still"},{"file":"s-08.jpg?v=5255ab8ca6","name":"After Party 2","type":"still"},{"file":"s-09.jpg?v=8d68112996","name":"s-09","type":"still"},{"file":"s-10.jpg?v=ebbfd764f2","name":"s-10","type":"still"}];
-films[3].src='film-04.mp4?v=649aa8acd2';films[3].file='motion-04.jpg?v=649aa8acd2';
-const works=[...films,...stills],$=id=>document.getElementById(id);let selected=0,lastFilm=0;
-function render(){for(const [target,items,offset] of [['video-gallery',films,0],['gallery',stills,films.length]]){const gallery=$(target);gallery.replaceChildren();if(target==='video-gallery'&&!videosEnabled)continue;items.forEach((w,n)=>{const i=n+offset,b=document.createElement('button');b.className='work'+(i===selected?' active':'');b.setAttribute('aria-label',`แสดง ${w.name}`);b.setAttribute('aria-pressed',String(i===selected));b.innerHTML=`<div class="thumb"><img loading="lazy" src="assets/${w.file}" alt="${w.name}">${w.type==='motion'?'<span class="play">▶ MOTION FILM</span>':''}</div><div class="meta"><span>${w.name}</span><span>${String(n+1).padStart(2,'0')} / ${w.type==='motion'?'MOTION':'STILL'}</span></div>`;b.onclick=()=>select(i);gallery.append(b)})}}
-function select(i){selected=(i+works.length)%works.length;if(!videosEnabled&&selected<films.length)selected=films.length;const w=works[selected],motion=w.type==='motion',v=$('film');$('art').hidden=motion;v.hidden=!motion;$('resume').hidden=motion||!videosEnabled;
-if(motion){lastFilm=selected;v.muted=true;v.loop=false;v.controls=false;if(v.getAttribute('src')!=='assets/'+w.src){v.src='assets/'+w.src;v.load()}else{v.currentTime=0}v.poster='assets/'+w.file;v.play().catch(()=>{v.controls=true})}else{v.pause();$('art').src='assets/'+w.file;$('art').alt=w.name}
-$('title').textContent=w.name;$('kind').textContent=motion?'MOTION · AUTO PLAYLIST':'STILL · SELECTED VIEW';$('number').textContent=`${String(motion?selected+1:selected-films.length+1).padStart(2,'0')} / ${motion?String(films.length).padStart(2,'0'):String(stills.length).padStart(2,'0')}`;render()}
-// Automatic playback advances only through the four videos.
-$('film').addEventListener('ended',()=>{if(videosEnabled&&selected<films.length)select((selected+1)%films.length)});
-$('resume').onclick=()=>select(lastFilm);
-function step(delta){if(selected<films.length)select((selected+delta+films.length)%films.length);else select(films.length+(selected-films.length+delta+stills.length)%stills.length)}
-$('prev').onclick=()=>step(-1);$('next').onclick=()=>step(1);
-$('light').oninput=e=>{$('room').style.setProperty('--room-light',e.target.value/100);$('lightvalue').textContent=e.target.value+'%'};
-$('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('room').requestFullscreen()}catch{$('room').scrollIntoView({behavior:'smooth',block:'center'})}};
-document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','BUTTON'].includes(document.activeElement.tagName))return;if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1)});select(videosEnabled?0:films.length);
+const $ = id => document.getElementById(id);
+const films = Array.from({length: 6}, (_, i) => {
+  const id = String(i + 1).padStart(2, '0');
+  return {id, name: 'Wedding in motion ' + id, src: 'assets/render-' + id + '.mp4', poster: 'assets/render-' + id + '.jpg'};
+});
+const film = $('film'), mapping = $('mapping'), cards = [];
+let selected = 0;
+
+for (const [index, item] of films.entries()) {
+  const button = document.createElement('button');
+  button.className = 'work';
+  button.type = 'button';
+  button.setAttribute('aria-label', 'แสดง ' + item.name);
+  button.innerHTML = '<div class="thumb"><img loading="lazy" src="' + item.poster + '" alt=""><span class="play">▶ MOTION FILM</span></div><div class="meta"><span>' + item.name + '</span><span>' + item.id + ' / MOTION</span></div>';
+  button.onclick = () => { select(index); $('showroom').scrollIntoView(); };
+  $('video-gallery').append(button);
+  cards.push(button);
+}
+
+function select(index) {
+  selected = (index + films.length) % films.length;
+  const item = films[selected];
+  film.poster = item.poster;
+  film.muted = true;
+  film.controls = false;
+  if (film.getAttribute('src') !== item.src) film.src = item.src;
+  else film.currentTime = 0;
+  film.play().catch(error => { if (error.name !== 'AbortError') film.controls = true; });
+  $('title').textContent = item.name;
+  $('number').textContent = item.id + ' / ' + String(films.length).padStart(2, '0');
+  for (const [i, card] of cards.entries()) {
+    card.classList.toggle('active', i === selected);
+    card.setAttribute('aria-pressed', String(i === selected));
+  }
+}
+
+film.addEventListener('ended', () => select(selected + 1));
+$('prev').onclick = () => select(selected - 1);
+$('next').onclick = () => select(selected + 1);
+$('mapping-toggle').onclick = () => {
+  const enabled = mapping.hidden;
+  mapping.hidden = !enabled;
+  $('mapping-toggle').setAttribute('aria-pressed', String(enabled));
+  if (enabled) mapping.play().catch(() => {
+    mapping.hidden = true;
+    $('mapping-toggle').setAttribute('aria-pressed', 'false');
+  });
+  else mapping.pause();
+};
+$('light').oninput = e => {
+  $('room').style.setProperty('--room-light', e.target.value / 100);
+  $('lightvalue').textContent = e.target.value + '%';
+};
+$('fullscreen').onclick = async () => {
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen();
+    else await $('room').requestFullscreen();
+  } catch {
+    $('room').scrollIntoView({behavior: 'smooth', block: 'center'});
+  }
+};
+document.addEventListener('keydown', e => {
+  if (['INPUT', 'TEXTAREA', 'BUTTON'].includes(document.activeElement.tagName)) return;
+  if (e.key === 'ArrowRight') select(selected + 1);
+  if (e.key === 'ArrowLeft') select(selected - 1);
+});
+select(0);
