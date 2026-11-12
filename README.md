@@ -19,4 +19,4 @@ Static website: publish this repository root with any static hosting provider. N
 
 Artwork and media remain the property of their respective owners. No reuse license is granted.
 
-All seven clips play as a muted continuous playlist and can be selected individually. Mapping uses full-room additive blending and covers the room without stretching the video.
+All seven clips play as a muted continuous playlist and can be selected individually. Mapping uses full-room additive blending and fits the complete video slightly beyond the stage screen without stretching it.
