@@ -10,10 +10,7 @@ body{overflow-x:hidden}header{position:absolute;inset:0 0 auto;z-index:5;width:1
 
 #motion-section[hidden]{display:none}#motion-section[hidden]+.still-heading{margin-top:0}
 
-/* The full-room mapping layer blends with the venue and screen below it. */
-.room>.mapping{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;mix-blend-mode:screen;pointer-events:none;z-index:1}
-.room>.mapping[hidden]{display:none}
+/* Cover the room using uniform scaling, then add the video light to the scene. */
+.room>.mapping{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;mix-blend-mode:plus-lighter;pointer-events:none;z-index:1}
+.room>.mapping[hidden],.screen #film[hidden]{display:none}
 .screen #film{object-fit:contain}
-.mapping-toggle{border:0;background:none;color:#b8ad99;font-size:11px;padding:8px 0;white-space:nowrap}
-.mapping-toggle[aria-pressed="true"]{color:#e2c79b}
-@media(max-width:700px){.mapping-toggle{order:4}}

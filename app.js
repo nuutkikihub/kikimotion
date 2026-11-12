@@ -3,6 +3,7 @@ const films = Array.from({length: 6}, (_, i) => {
   const id = String(i + 1).padStart(2, '0');
   return {id, name: 'Wedding in motion ' + id, src: 'assets/render-' + id + '.mp4', poster: 'assets/render-' + id + '.jpg'};
 });
+films.push({id: '07', name: 'Mapping', src: 'assets/mapping.mp4', poster: 'assets/mapping.jpg', fullRoom: true});
 const film = $('film'), mapping = $('mapping'), cards = [];
 let selected = 0;
 
@@ -20,13 +21,21 @@ for (const [index, item] of films.entries()) {
 function select(index) {
   selected = (index + films.length) % films.length;
   const item = films[selected];
-  film.poster = item.poster;
-  film.muted = true;
-  film.controls = false;
-  if (film.getAttribute('src') !== item.src) film.src = item.src;
-  else film.currentTime = 0;
-  film.play().catch(error => { if (error.name !== 'AbortError') film.controls = true; });
+  const player = item.fullRoom ? mapping : film;
+  const inactive = item.fullRoom ? film : mapping;
+  inactive.pause();
+  inactive.hidden = true;
+  player.hidden = false;
+  player.muted = true;
+  if (player === film) film.controls = false;
+  if (!item.fullRoom) film.poster = item.poster;
+  if (player.getAttribute('src') !== item.src) player.src = item.src;
+  else player.currentTime = 0;
+  player.play().catch(error => {
+    if (error.name !== 'AbortError' && player === film && !film.hidden) film.controls = true;
+  });
   $('title').textContent = item.name;
+  $('kind').textContent = item.fullRoom ? 'MAPPING · FULL ROOM' : 'MOTION · AUTO PLAYLIST';
   $('number').textContent = item.id + ' / ' + String(films.length).padStart(2, '0');
   for (const [i, card] of cards.entries()) {
     card.classList.toggle('active', i === selected);
@@ -34,19 +43,11 @@ function select(index) {
   }
 }
 
-film.addEventListener('ended', () => select(selected + 1));
+for (const player of [film, mapping]) player.addEventListener('ended', () => {
+  if (!player.hidden) select(selected + 1);
+});
 $('prev').onclick = () => select(selected - 1);
 $('next').onclick = () => select(selected + 1);
-$('mapping-toggle').onclick = () => {
-  const enabled = mapping.hidden;
-  mapping.hidden = !enabled;
-  $('mapping-toggle').setAttribute('aria-pressed', String(enabled));
-  if (enabled) mapping.play().catch(() => {
-    mapping.hidden = true;
-    $('mapping-toggle').setAttribute('aria-pressed', 'false');
-  });
-  else mapping.pause();
-};
 $('light').oninput = e => {
   $('room').style.setProperty('--room-light', e.target.value / 100);
   $('lightvalue').textContent = e.target.value + '%';
