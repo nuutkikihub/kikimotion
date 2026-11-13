@@ -3,17 +3,17 @@ const films = Array.from({length: 6}, (_, i) => {
   const id = String(i + 1).padStart(2, '0');
   return {id, name: 'Wedding in motion ' + id, src: 'assets/render-' + id + '.mp4', poster: 'assets/render-' + id + '.jpg'};
 });
-films.push({id: '07', name: 'Mapping', src: 'assets/mapping.mp4', poster: 'assets/mapping.jpg', fullRoom: true});
+for (const clip of ['07', '07-retro', '08', '08-retro']) {
+  const id = String(films.length + 1).padStart(2, '0');
+  films.push({id, name: 'Wedding in motion ' + clip, src: 'assets/render-' + clip + '.mp4', poster: 'assets/render-' + clip + '.jpg'});
+}
+films.push({id: String(films.length + 1).padStart(2, '0'), name: 'Mapping', src: 'assets/mapping.mp4', poster: 'assets/mapping.jpg', fullRoom: true});
 for (const group of ['Ben', 'ETC']) {
   for (const speed of ['Fast', 'Medium', 'Slow']) {
     const slug = (group + '-' + speed).toLowerCase();
     const id = String(films.length + 1).padStart(2, '0');
     films.push({id, name: group + ' · ' + speed, src: 'assets/' + slug + '.mp4', poster: 'assets/' + slug + '.jpg'});
   }
-}
-for (const clip of ['07', '07-retro', '08', '08-retro']) {
-  const id = String(films.length + 1).padStart(2, '0');
-  films.push({id, name: 'Wedding in motion ' + clip, src: 'assets/render-' + clip + '.mp4', poster: 'assets/render-' + clip + '.jpg'});
 }
 const film = $('film'), mapping = $('mapping'), cards = [];
 let selected = 0;
