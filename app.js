@@ -11,6 +11,10 @@ for (const group of ['Ben', 'ETC']) {
     films.push({id, name: group + ' · ' + speed, src: 'assets/' + slug + '.mp4', poster: 'assets/' + slug + '.jpg'});
   }
 }
+for (const clip of ['07', '07-retro', '08', '08-retro']) {
+  const id = String(films.length + 1).padStart(2, '0');
+  films.push({id, name: 'Wedding in motion ' + clip, src: 'assets/render-' + clip + '.mp4', poster: 'assets/render-' + clip + '.jpg'});
+}
 const film = $('film'), mapping = $('mapping'), cards = [];
 let selected = 0;
 
